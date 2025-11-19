@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sassycode-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sassycode
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sassycode
+  template:
+    metadata:
+      labels:
+        app: sassycode
+    spec:
+      containers:
+        - name: manager
+          image: sassycode:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          env:
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: openai-api
+                  key: api-key
+            - name: DATABASE_URL
+              value: sqlite:////data/sassycode.db
+            - name: PORT
+              value: "3000"
+          volumeMounts:
+            - mountPath: /data
+              name: data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: sassycode-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sassycode
+spec:
+  selector:
+    app: sassycode
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3000
+

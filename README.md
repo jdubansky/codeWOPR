@@ -141,6 +141,66 @@ sassycode-manager --reload
 
 Open http://localhost:3000 to use the UI (default port can be overridden with `--port` or `PORT`).
 
+## Docker
+
+Build the container image (includes both the management server and scanner CLI):
+
+```bash
+docker build -t sassycode:latest .
+```
+
+Run it locally (mount a host directory to persist the SQLite database):
+
+```bash
+mkdir -p ./data
+docker run --rm -p 3000:3000 \
+  -e OPENAI_API_KEY=sk-... \
+  -e DATABASE_URL=sqlite:////data/sassycode.db \
+  -v "$(pwd)/data":/data \
+  --name sassycode \
+  sassycode:latest
+```
+
+The container defaults to `HOST=0.0.0.0` and listens on `PORT=3000`. You can still run the scanner CLI inside the image if needed:
+
+```bash
+docker run --rm -it \
+  -e OPENAI_API_KEY=sk-... \
+  -v /path/to/project:/scan \
+  sassycode:latest \
+  sassycode-scanner scan --path /scan --model gpt-4o-mini
+```
+
+## Kubernetes
+
+1. Build and push the image to a registry your cluster can access:
+
+```bash
+docker build -t ghcr.io/your-org/sassycode:latest .
+docker push ghcr.io/your-org/sassycode:latest
+```
+
+2. Create a secret that holds the OpenAI API key:
+
+```bash
+kubectl create secret generic openai-api \
+  --from-literal=api-key=sk-your-key
+```
+
+3. Apply the sample manifests (PVC + Deployment + Service):
+
+```bash
+kubectl apply -f deploy/k8s/deployment.yaml
+```
+
+The deployment:
+
+- Mounts a persistent volume at `/data` and points `DATABASE_URL` to `sqlite:////data/sassycode.db`.
+- Exposes the web UI on port 80 via a ClusterIP service (change to LoadBalancer/Ingress as needed).
+- Pulls its OpenAI API key from the `openai-api` secret.
+
+Customize the image name, resource requests, and replicas for your environment. For production, consider using an external database (e.g., Postgres) by setting `DATABASE_URL` and removing the volume mount.
+
 ## Notes
 
 - Requires Python 3.11+
