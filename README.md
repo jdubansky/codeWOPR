@@ -1,11 +1,11 @@
-# sassycode
+# codeWOPR
 
 <div align="center">
-  <img src="./Sassycode1.png" alt="sassycode screenshot 1" width="48%" />
-  <img src="./Sassycode2.png" alt="sassycode screenshot 2" width="48%" />
+  <img src="./codeWOPR1.png" alt="codeWOPR screenshot 1" width="48%" />
+  <img src="./codeWOPR2.png" alt="codeWOPR screenshot 2" width="48%" />
   <br/>
-  <img src="./Sassycode3.png" alt="sassycode screenshot 3" width="48%" />
-  <img src="./Sassycode4.png" alt="sassycode screenshot 4" width="48%" />
+  <img src="./codeWOPR3.png" alt="codeWOPR screenshot 3" width="48%" />
+  <img src="./codeWOPR4.png" alt="codeWOPR screenshot 4" width="48%" />
   <br/>
   <em>Overview, scan triggering, findings, and details</em>
   <br/>
@@ -39,7 +39,7 @@ export $(grep -v '^#' .env | xargs)  # or use a shell that auto-loads .env
 3. Run scanner (standalone)
 
 ```bash
-sassycode-scanner scan --path /path/to/repo --model gpt-4o-mini
+codewopr-scanner scan --path /path/to/repo --model gpt-4o-mini
 ```
 
 ### CI/CD ingestion to management console
@@ -48,7 +48,7 @@ Post scan results to the running console (auto-creates/updates the Project):
 
 ```bash
 # The CLI still prints JSON to stdout; posting is optional.
-sassycode-scanner scan \
+codewopr-scanner scan \
   --path /path/to/repo \
   --model gpt-4o-mini \
   --concurrency 8 \
@@ -62,7 +62,7 @@ sassycode-scanner scan \
 Scan only the files changed on a branch (diff vs merge-base with HEAD):
 
 ```bash
-sassycode-scanner scan \
+codewopr-scanner scan \
   --path /path/to/repo \
   --model gpt-4o-mini \
   --branch Feature7 \
@@ -74,7 +74,7 @@ sassycode-scanner scan \
 Scan only the files changed between two refs (explicit base/head):
 
 ```bash
-sassycode-scanner scan \
+codewopr-scanner scan \
   --path /path/to/repo \
   --model gpt-4o-mini \
   --git-base origin/main --git-head Feature7 \
@@ -85,7 +85,7 @@ sassycode-scanner scan \
 Scan only the files in a GitHub PR (uses GitHub API; set GITHUB_TOKEN or GH_TOKEN if needed):
 
 ```bash
-sassycode-scanner scan \
+codewopr-scanner scan \
   --path /path/to/repo \
   --model gpt-4o-mini \
   --github-pr juice-shop/juice-shop#2783 \
@@ -96,7 +96,7 @@ sassycode-scanner scan \
 Scan only your working tree changes vs HEAD:
 
 ```bash
-sassycode-scanner scan --path /path/to/repo --model gpt-4o-mini --only-changed
+codewopr-scanner scan --path /path/to/repo --model gpt-4o-mini --only-changed
 ```
 
 ### Run the CLI without activating the venv
@@ -105,38 +105,38 @@ You can invoke the CLI directly using the venv binaries or by adjusting PATH:
 
 ```bash
 # 1) Direct console script
-~/sassycode/.venv/bin/sassycode-scanner scan --path /path --model gpt-4o-mini
+~/codeWOPR/.venv/bin/codewopr-scanner scan --path /path --model gpt-4o-mini
 
 # 2) Module invocation with the venv's Python
-~/sassycode/.venv/bin/python -m scanner.cli scan --path /path --model gpt-4o-mini
+~/codeWOPR/.venv/bin/python -m scanner.cli scan --path /path --model gpt-4o-mini
 
 # 3) Temporary PATH prepend
-PATH=~/sassycode/.venv/bin:$PATH \
-sassycode-scanner scan --path /path --model gpt-4o-mini
+PATH=~/codeWOPR/.venv/bin:$PATH \
+codewopr-scanner scan --path /path --model gpt-4o-mini
 
 # 4) Inline env vars (e.g., OpenAI key) with direct binary
 OPENAI_API_KEY=YOUR_KEY \
-~/sassycode/.venv/bin/sassycode-scanner scan --path /path --model gpt-4o-mini
+~/codeWOPR/.venv/bin/codewopr-scanner scan --path /path --model gpt-4o-mini
 ```
 
 Alternate ways to run the scanner (equivalent):
 
 ```bash
 # 1) Console script (shown above)
-sassycode-scanner scan --path "~/WebGoat" --model gpt-4o-mini --verbose
+codewopr-scanner scan --path "~/WebGoat" --model gpt-4o-mini --verbose
 
 # 2) Module invocation (no entrypoint needed)
 python -m scanner.cli scan --path "~/WebGoat" --model gpt-4o-mini --verbose
 
 # 3) Direct file execution (ensure PYTHONPATH points to repo root)
-PYTHONPATH=~sassycode \
-python ~/sassycode/scanner/cli.py scan --path "~/WebGoat" --model gpt-4o-mini --verbose
+PYTHONPATH=~/codeWOPR \
+python ~/codeWOPR/scanner/cli.py scan --path "~/WebGoat" --model gpt-4o-mini --verbose
 ```
 
 4. Run management server
 
 ```bash
-sassycode-manager --reload
+codewopr-manager --reload
 ```
 
 Open http://localhost:3000 to use the UI (default port can be overridden with `--port` or `PORT`).
@@ -146,7 +146,7 @@ Open http://localhost:3000 to use the UI (default port can be overridden with `-
 Build the container image (includes both the management server and scanner CLI):
 
 ```bash
-docker build -t sassycode:latest .
+docker build -t codewopr:latest .
 ```
 
 Run it locally (mount a host directory to persist the SQLite database):
@@ -155,10 +155,10 @@ Run it locally (mount a host directory to persist the SQLite database):
 mkdir -p ./data
 docker run --rm -p 3000:3000 \
   -e OPENAI_API_KEY=sk-... \
-  -e DATABASE_URL=sqlite:////data/sassycode.db \
+  -e DATABASE_URL=sqlite:////data/codewopr.db \
   -v "$(pwd)/data":/data \
-  --name sassycode \
-  sassycode:latest
+  --name codewopr \
+  codewopr:latest
 ```
 
 The container defaults to `HOST=0.0.0.0` and listens on `PORT=3000`. You can still run the scanner CLI inside the image if needed:
@@ -167,8 +167,8 @@ The container defaults to `HOST=0.0.0.0` and listens on `PORT=3000`. You can sti
 docker run --rm -it \
   -e OPENAI_API_KEY=sk-... \
   -v /path/to/project:/scan \
-  sassycode:latest \
-  sassycode-scanner scan --path /scan --model gpt-4o-mini
+  codewopr:latest \
+  codewopr-scanner scan --path /scan --model gpt-4o-mini
 ```
 
 ## Kubernetes
@@ -176,8 +176,8 @@ docker run --rm -it \
 1. Build and push the image to a registry your cluster can access:
 
 ```bash
-docker build -t ghcr.io/your-org/sassycode:latest .
-docker push ghcr.io/your-org/sassycode:latest
+docker build -t ghcr.io/your-org/codewopr:latest .
+docker push ghcr.io/your-org/codewopr:latest
 ```
 
 2. Create a secret that holds the OpenAI API key:
@@ -195,7 +195,7 @@ kubectl apply -f deploy/k8s/deployment.yaml
 
 The deployment:
 
-- Mounts a persistent volume at `/data` and points `DATABASE_URL` to `sqlite:////data/sassycode.db`.
+- Mounts a persistent volume at `/data` and points `DATABASE_URL` to `sqlite:////data/codewopr.db`.
 - Exposes the web UI on port 80 via a ClusterIP service (change to LoadBalancer/Ingress as needed).
 - Pulls its OpenAI API key from the `openai-api` secret.
 

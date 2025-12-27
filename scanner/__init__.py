@@ -1,3 +1,3 @@
-"""Scanner package for sassycode."""
+"""Scanner package for codeWOPR."""
 
 

@@ -20,7 +20,7 @@ RUN pip install --upgrade pip && pip install .
 # Default runtime env vars (can be overridden)
 ENV HOST=0.0.0.0 \
     PORT=3000 \
-    DATABASE_URL=sqlite:////data/sassycode.db \
+    DATABASE_URL=sqlite:////data/codewopr.db \
     DATA_DIR=/data
 
 RUN mkdir -p /data
@@ -28,5 +28,5 @@ VOLUME ["/data"]
 
 EXPOSE 3000
 
-CMD ["sassycode-manager", "--host", "0.0.0.0"]
+CMD ["codewopr-manager", "--host", "0.0.0.0"]
 

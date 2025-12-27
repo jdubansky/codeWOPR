@@ -1,3 +1,3 @@
-"""Management server for sassycode."""
+"""Management server for codeWOPR."""
 
 

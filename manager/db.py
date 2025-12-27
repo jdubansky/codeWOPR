@@ -13,7 +13,7 @@ class Base(DeclarativeBase):
 
 def get_database_url() -> str:
     load_dotenv()
-    return os.getenv("DATABASE_URL", "sqlite:///./sassycode.db")
+    return os.getenv("DATABASE_URL", "sqlite:///./codewopr.db")
 
 
 engine = create_engine(get_database_url(), future=True)

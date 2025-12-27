@@ -22,7 +22,7 @@ from .models import Project, Scan, Finding, ScanLog, UniqueFinding, Schedule, Sc
 
 
 load_dotenv()
-app = FastAPI(title="sassycode manager")
+app = FastAPI(title="codeWOPR manager")
 
 base_dir = Path(__file__).resolve().parent
 templates = Jinja2Templates(directory=str(base_dir / "templates"))

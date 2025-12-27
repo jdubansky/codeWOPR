@@ -3,7 +3,7 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "sassycode"
+name = "codewopr"
 version = "0.1.0"
 description = "SAST scanner and management interface powered by OpenAI"
 readme = "README.md"
@@ -27,8 +27,8 @@ dependencies = [
 dev = ["pytest", "httpx", "ruff", "black"]
 
 [project.scripts]
-sassycode-scanner = "scanner.cli:main"
-sassycode-manager = "manager.__main__:main"
+codewopr-scanner = "scanner.cli:main"
+codewopr-manager = "manager.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["."]

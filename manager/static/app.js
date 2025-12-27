@@ -11,7 +11,7 @@ document.addEventListener('click', function(e) {
 // Theme toggle
 (function() {
   const root = document.documentElement;
-  const key = 'sassycode-theme';
+  const key = 'codewopr-theme';
   function apply(theme) {
     if (theme === 'dark') root.setAttribute('data-theme', 'dark');
     else root.removeAttribute('data-theme');

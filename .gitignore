@@ -23,5 +23,5 @@ dist/
 .env
 
 # SQLite database
-sassycode.db
+codewopr.db
 

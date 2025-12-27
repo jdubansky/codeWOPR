@@ -661,7 +661,7 @@ def run_scan(path: Path, model: str, max_bytes: int = 200_000, temperature: floa
 
 
 def main(argv: Optional[List[str]] = None) -> int:
-    parser = argparse.ArgumentParser(prog="sassycode-scanner", description="SAST scanner using OpenAI")
+    parser = argparse.ArgumentParser(prog="codewopr-scanner", description="codeWOPR SAST scanner using OpenAI")
     sub = parser.add_subparsers(dest="command", required=True)
 
     p_scan = sub.add_parser("scan", help="Scan a project directory")

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: sassycode-data
+  name: codewopr-data
 spec:
   accessModes:
     - ReadWriteOnce
@@ -12,20 +12,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sassycode
+  name: codewopr
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sassycode
+      app: codewopr
   template:
     metadata:
       labels:
-        app: sassycode
+        app: codewopr
     spec:
       containers:
         - name: manager
-          image: sassycode:latest
+          image: codewopr:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000
@@ -36,7 +36,7 @@ spec:
                   name: openai-api
                   key: api-key
             - name: DATABASE_URL
-              value: sqlite:////data/sassycode.db
+              value: sqlite:////data/codewopr.db
             - name: PORT
               value: "3000"
           volumeMounts:
@@ -45,15 +45,15 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: sassycode-data
+            claimName: codewopr-data
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: sassycode
+  name: codewopr
 spec:
   selector:
-    app: sassycode
+    app: codewopr
   ports:
     - name: http
       port: 80
